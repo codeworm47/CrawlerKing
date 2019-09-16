@@ -1,0 +1,7 @@
+scrapy
+selenium
+sqlalchemy
+pymssql
+requests
+reverse_geocoder
+opencage
