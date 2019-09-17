@@ -1,4 +1,4 @@
-from tests.Crawlers.crawler_test_base import CrawlerTestBase
+from tests.crawlers.crawler_test_base import CrawlerTestBase
 
 
 """
