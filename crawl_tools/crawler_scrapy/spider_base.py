@@ -1,8 +1,10 @@
 import scrapy
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 from utils.helpers.http_helper import HttpHelper
 from utils.session import Session
 from scrapy.selector import Selector
+from typing import List
+from data.repository_base import RepositoryBase
 
 
 class ScrapySpiderBase(scrapy.Spider):
@@ -17,6 +19,19 @@ class ScrapySpiderBase(scrapy.Spider):
     }
 
     def __init__(self, name=None, session=None, item=None, page=None, size=None, **kwargs):
+        """
+
+        :param name: name of spider to run
+        :param session: session id (session_id)
+        :param item: single item url (item_url)
+        :param page: indicate which page must be processed in current session
+        :param size: number of item that must be processed in current session
+        Note: page and size parameters are useful when user wants to run
+        multiple instances of one spider simultaneously(in the interest of time),
+        each of which is responsible of processing a chunk of data
+        The chunk that must be processed by current spider instance, is calculated
+        with `page` and `size` parameters (see __slice method)
+        """
         self.item_url = item
         self.page = int(page) if page is not None else None
         self.http = HttpHelper()
@@ -26,6 +41,9 @@ class ScrapySpiderBase(scrapy.Spider):
         super().__init__(name, **kwargs)
 
     def start_requests(self):
+        """
+        this method is called by Scrapy engine, therefore it's name should not be changed
+        """
         if self.item_url is not None:
             yield scrapy.Request(url=self.item_url, callback=self.parse)
         elif self.sitemap_url is not None:
@@ -60,7 +78,7 @@ class ScrapySpiderBase(scrapy.Spider):
         self.save(body, item_url)
 
     @abstractmethod
-    def get_data_repositories(self)-> list:
+    def get_data_repositories(self)-> List[RepositoryBase]:
         pass
 
     @abstractmethod

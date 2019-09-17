@@ -3,13 +3,13 @@ from crawlers.digiteb.spiders.abstraction.spider_base_selenium import SpiderBase
 # do not delete this !
 
 
-class SeleniumSpiderSpiderRunner(SpiderRunnerBase):
+class SeleniumSpiderRunner(SpiderRunnerBase):
 
     def run(self, spider_name: str = None, item_url: str = None):
         if spider_name is not None:
             spider_instance = eval(spider_name)
             if item_url is not None:
-                spider_instance.crawl_details(item_url)
+                spider_instance.crawl_item(item_url)
             else:
                 spider_instance.crawl_list()
         else:
